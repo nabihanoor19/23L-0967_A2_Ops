@@ -1,0 +1,4 @@
+venv/
+.env
+.mplcache/
+__pycache__/
