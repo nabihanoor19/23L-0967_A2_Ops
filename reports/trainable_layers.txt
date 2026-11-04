@@ -1,0 +1,18 @@
+=== Stage 1: backbone frozen, head only (lr = 1e-3) ===
+Trainable parameters (whole model): 1281
+Total parameters: 2259265
+Trainable backbone layers: 0 of 154
+Trainable head layers: gap(no weights), dropout(no weights), prob_ai
+
+=== Stage 2: last block unfrozen (lr = 1e-5) ===
+Trainable parameters (whole model): 880321
+Total parameters: 2259265
+Trainable backbone layers: 7 of 154
+  - block_16_expand
+  - block_16_expand_relu
+  - block_16_depthwise
+  - block_16_depthwise_relu
+  - block_16_project
+  - Conv_1
+  - out_relu
+Trainable head layers: gap(no weights), dropout(no weights), prob_ai

@@ -2,3 +2,5 @@ venv/
 .env
 .mplcache/
 __pycache__/
+.keras_home/
+.mplcache/

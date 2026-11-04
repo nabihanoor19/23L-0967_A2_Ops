@@ -29,3 +29,51 @@ def build_baseline(dropout=0.4, learning_rate=1e-3):
         ],
     )
     return model
+
+def _compile(model, learning_rate):
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(learning_rate),
+        loss="binary_crossentropy",
+        metrics=[
+            "accuracy",
+            tf.keras.metrics.AUC(name="auc"),
+            tf.keras.metrics.Precision(name="precision"),
+            tf.keras.metrics.Recall(name="recall"),
+        ],
+    )
+
+
+def build_transfer(dropout=0.3, learning_rate=1e-3):
+    """Stage 1: frozen MobileNetV2 backbone + new head."""
+    base = tf.keras.applications.MobileNetV2(
+        input_shape=(IMG_SIZE, IMG_SIZE, 3),
+        include_top=False,
+        weights="imagenet",
+        name="backbone",
+    )
+    base.trainable = False
+
+    inputs = layers.Input(shape=(IMG_SIZE, IMG_SIZE, 3), name="image")
+    # MobileNetV2 expects pixels in [-1, 1]: x / 127.5 - 1
+    x = layers.Rescaling(1.0 / 127.5, offset=-1.0, name="mobilenet_preprocess")(inputs)
+    x = base(x, training=False)          # keep BatchNorm in inference mode
+    x = layers.GlobalAveragePooling2D(name="gap")(x)
+    x = layers.Dropout(dropout, name="dropout")(x)
+    outputs = layers.Dense(1, activation="sigmoid", name="prob_ai")(x)
+
+    model = models.Model(inputs, outputs, name="mobilenetv2_transfer")
+    _compile(model, learning_rate)
+    return model
+
+
+def unfreeze_last_block(model, learning_rate=1e-5, first_layer="block_16_expand"):
+    """Stage 2: unfreeze only the last block (block_16 + final conv), keep BatchNorm frozen."""
+    base = model.get_layer("backbone")
+    base.trainable = True
+    reached = False
+    for layer in base.layers:
+        if layer.name == first_layer:
+            reached = True
+        layer.trainable = reached and not isinstance(layer, layers.BatchNormalization)
+    _compile(model, learning_rate)       # must recompile after changing trainable
+    return model
