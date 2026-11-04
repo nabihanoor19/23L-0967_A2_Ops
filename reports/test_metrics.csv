@@ -1,0 +1,5 @@
+model,setting,threshold,accuracy,precision,recall,f1,roc_auc,TN,FP,FN,TP
+baseline,chosen threshold,0.402,0.544,0.549,0.963,0.7,0.557,2,64,3,78
+baseline,threshold 0.5,0.5,0.449,0.0,0.0,0.0,0.557,66,0,81,0
+transfer,chosen threshold,0.317,0.707,0.683,0.877,0.768,0.824,33,33,10,71
+transfer,threshold 0.5,0.5,0.748,0.756,0.802,0.778,0.824,45,21,16,65
