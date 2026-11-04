@@ -25,9 +25,9 @@ def load_image(path, label):
 def make_dataset(csv_path, training=False):
     df = pd.read_csv(csv_path)
     ds = tf.data.Dataset.from_tensor_slices((df["path"].values, df["label"].values))
+    ds = ds.map(load_image, num_parallel_calls=AUTOTUNE).cache()   # decode + resize once
     if training:
         ds = ds.shuffle(len(df), seed=SEED, reshuffle_each_iteration=True)
-    ds = ds.map(load_image, num_parallel_calls=AUTOTUNE)
     ds = ds.batch(BATCH_SIZE)
     if training:
         ds = ds.map(lambda x, y: (augment(x, training=True), y),
