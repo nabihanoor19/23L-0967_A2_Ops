@@ -77,3 +77,21 @@ def unfreeze_last_block(model, learning_rate=1e-5, first_layer="block_16_expand"
         layer.trainable = reached and not isinstance(layer, layers.BatchNormalization)
     _compile(model, learning_rate)       # must recompile after changing trainable
     return model
+
+UNFREEZE_FROM = {0: None, 1: "block_16_expand", 2: "block_15_expand", 3: "block_14_expand"}
+
+
+def build_tuned(dropout, learning_rate, unfrozen_blocks):
+    """Transfer model with the last N blocks unfrozen (BatchNorm stays frozen)."""
+    model = build_transfer(dropout=dropout, learning_rate=learning_rate)
+    first = UNFREEZE_FROM[unfrozen_blocks]
+    if first is not None:
+        base = model.get_layer("backbone")
+        base.trainable = True
+        reached = False
+        for layer in base.layers:
+            if layer.name == first:
+                reached = True
+            layer.trainable = reached and not isinstance(layer, layers.BatchNormalization)
+        _compile(model, learning_rate)
+    return model
