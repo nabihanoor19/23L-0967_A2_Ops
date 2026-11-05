@@ -3,4 +3,9 @@ venv/
 .mplcache/
 __pycache__/
 .keras_home/
-.mplcache/
+.mplcache/models/
+tuner_runs/
+mlruns/
+mlflow_toy.db
+mlflow.db
+mlflow_tmp/
