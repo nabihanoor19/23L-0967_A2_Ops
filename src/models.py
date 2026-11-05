@@ -43,20 +43,16 @@ def _compile(model, learning_rate):
     )
 
 
-def build_transfer(dropout=0.3, learning_rate=1e-3):
+def build_transfer(dropout=0.3, learning_rate=1e-3, img_size=IMG_SIZE):
     """Stage 1: frozen MobileNetV2 backbone + new head."""
     base = tf.keras.applications.MobileNetV2(
-        input_shape=(IMG_SIZE, IMG_SIZE, 3),
-        include_top=False,
-        weights="imagenet",
-        name="backbone",
-    )
+        input_shape=(img_size, img_size, 3), include_top=False,
+        weights="imagenet", name="backbone")
     base.trainable = False
 
-    inputs = layers.Input(shape=(IMG_SIZE, IMG_SIZE, 3), name="image")
-    # MobileNetV2 expects pixels in [-1, 1]: x / 127.5 - 1
+    inputs = layers.Input(shape=(img_size, img_size, 3), name="image")
     x = layers.Rescaling(1.0 / 127.5, offset=-1.0, name="mobilenet_preprocess")(inputs)
-    x = base(x, training=False)          # keep BatchNorm in inference mode
+    x = base(x, training=False)
     x = layers.GlobalAveragePooling2D(name="gap")(x)
     x = layers.Dropout(dropout, name="dropout")(x)
     outputs = layers.Dense(1, activation="sigmoid", name="prob_ai")(x)
@@ -64,7 +60,6 @@ def build_transfer(dropout=0.3, learning_rate=1e-3):
     model = models.Model(inputs, outputs, name="mobilenetv2_transfer")
     _compile(model, learning_rate)
     return model
-
 
 def unfreeze_last_block(model, learning_rate=1e-5, first_layer="block_16_expand"):
     """Stage 2: unfreeze only the last block (block_16 + final conv), keep BatchNorm frozen."""
@@ -81,9 +76,8 @@ def unfreeze_last_block(model, learning_rate=1e-5, first_layer="block_16_expand"
 UNFREEZE_FROM = {0: None, 1: "block_16_expand", 2: "block_15_expand", 3: "block_14_expand"}
 
 
-def build_tuned(dropout, learning_rate, unfrozen_blocks):
-    """Transfer model with the last N blocks unfrozen (BatchNorm stays frozen)."""
-    model = build_transfer(dropout=dropout, learning_rate=learning_rate)
+def build_tuned(dropout, learning_rate, unfrozen_blocks, img_size=IMG_SIZE):
+    model = build_transfer(dropout=dropout, learning_rate=learning_rate, img_size=img_size)
     first = UNFREEZE_FROM[unfrozen_blocks]
     if first is not None:
         base = model.get_layer("backbone")
