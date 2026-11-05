@@ -1,0 +1,11 @@
+no,error_type,p,width,height,format,file_size,path
+1,FP,0.991,1200,630,PNG,1175469,data/raw/RealArt/RealArt/famous-paintings-fb.png
+2,FP,0.943,1920,1080,JPEG,301304,data/raw/RealArt/RealArt/getty_511618259_186076.jpg
+3,FP,0.942,1840,1040,JPEG,172339,data/raw/RealArt/RealArt/iy1ex3cookmf9cme5qlnxa.jpg
+4,FP,0.935,1500,933,JPEG,103414,data/raw/RealArt/RealArt/ct-art-vector-illustrations-creative-minimalist-hand-drawn-vector-2286463217.jpg
+5,FP,0.817,2048,1365,JPEG,563605,data/raw/RealArt/RealArt/02-still-for-america-room-loop-superJumbo.jpg
+6,FN,0.023,1200,675,JPEG,1214790,data/raw/AiArtData/AiArtData/Nov20_17_498430921.jpg
+7,FN,0.049,1212,1480,PNG,4554287,data/raw/AiArtData/AiArtData/Screen_Shot_2023-01-22_at_5.33.01_PM.png
+8,FN,0.07,760,380,JPEG,184317,data/raw/AiArtData/AiArtData/240201-airec-main-ksp-5625e8.jpg
+9,FN,0.129,1068,601,JPEG,83102,data/raw/AiArtData/AiArtData/Boris-Eldagsen-AI-art.jpg
+10,FN,0.199,800,400,JPEG,39454,data/raw/AiArtData/AiArtData/midjourney-v5-drafts-Artboard-4-800x400.jpg
