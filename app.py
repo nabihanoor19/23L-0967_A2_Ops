@@ -11,6 +11,11 @@ from werkzeug.utils import secure_filename
 from src import db
 from src.inference import InvalidImageError, load_model_once
 
+os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")   # oneDNN made single-image calls very slow here
+
+from dotenv import load_dotenv
+load_dotenv()          # reads .env (if present) into environment variables, before any setting is read
+
 MAX_UPLOAD_MB = float(os.environ.get("MAX_UPLOAD_MB", 8))
 MAX_PIXELS = int(os.environ.get("MAX_PIXELS", 30_000_000))
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "bmp"}
@@ -102,9 +107,13 @@ def history():
 @app.get("/health")
 def health():
     database_ok = db.db_ok()
-    body = {"status": "ok" if database_ok else "degraded", "model_loaded": True,
+    body = {"status": "ok" if database_ok else "degraded",
+            "model_loaded": True,
             "model_version": predictor.model_version,
-            "database": "ok" if database_ok else "unreachable"}
+            "threshold": round(predictor.threshold, 4),
+            "database": "ok" if database_ok else "unreachable",
+            "debug_mode": app.debug,
+            "max_upload_mb": MAX_UPLOAD_MB}
     return jsonify(body), (200 if database_ok else 503)
 
 
