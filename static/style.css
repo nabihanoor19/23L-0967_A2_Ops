@@ -1,0 +1,35 @@
+:root { --bg:#f5f6fa; --card:#fff; --text:#1f2430; --muted:#667085; --line:#e4e7ec;
+        --accent:#3b5bdb; --ai:#c92a2a; --real:#2b8a3e; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: system-ui, "Segoe UI", Arial, sans-serif; background:var(--bg);
+       color:var(--text); line-height:1.5; }
+.wrap { max-width:960px; margin:0 auto; padding:0 20px; }
+header { background:var(--card); border-bottom:1px solid var(--line); }
+header .wrap { display:flex; justify-content:space-between; align-items:center; height:60px; }
+.brand { font-weight:700; font-size:1.2rem; color:var(--accent); text-decoration:none; }
+nav a { margin-left:20px; color:var(--text); text-decoration:none; font-weight:500; }
+nav a:hover { color:var(--accent); }
+main { padding-top:32px; padding-bottom:16px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:28px;
+        box-shadow:0 1px 3px rgba(0,0,0,.05); }
+h1 { margin-top:0; }
+.muted, .small { color:var(--muted); font-size:.9rem; }
+.dropzone { border:2px dashed var(--line); border-radius:12px; padding:28px; text-align:center; margin:20px 0; }
+.btn { display:inline-block; background:var(--accent); color:#fff; border:0; padding:11px 22px;
+       border-radius:8px; font-size:1rem; cursor:pointer; text-decoration:none; }
+.btn:hover { opacity:.9; }
+.result { display:flex; gap:28px; flex-wrap:wrap; }
+.result img { max-width:100%; width:340px; border-radius:8px; border:1px solid var(--line); align-self:flex-start; }
+.verdict { display:inline-block; padding:6px 16px; border-radius:20px; color:#fff; font-weight:700; font-size:1.2rem; }
+.verdict.ai { background:var(--ai); }
+.verdict.real { background:var(--real); }
+.bar { background:var(--line); border-radius:8px; height:12px; overflow:hidden; margin:6px 0 14px; }
+.bar span { display:block; height:100%; background:var(--accent); }
+.caveat { background:#fff8e1; border-left:4px solid #f59f00; padding:12px 16px; border-radius:6px; margin-top:18px; }
+table { width:100%; border-collapse:collapse; font-size:.92rem; }
+th, td { text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); }
+th { color:var(--muted); font-weight:600; }
+.table-scroll { overflow-x:auto; }
+.error { text-align:center; }
+.error .code { font-size:3.5rem; font-weight:700; color:var(--muted); }
+footer { padding-top:24px; padding-bottom:24px; }

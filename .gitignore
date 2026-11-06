@@ -9,3 +9,5 @@ mlruns/
 mlflow_toy.db
 mlflow.db
 mlflow_tmp/
+test_files/
+visionguard.db

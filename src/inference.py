@@ -4,6 +4,8 @@ from pathlib import Path
 
 import numpy as np
 import tensorflow as tf
+import os
+os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")   # oneDNN made single-image calls very slow here
 
 MODEL_PATH = os.environ.get("MODEL_PATH", "models/champion.keras")
 META_PATH = os.environ.get("MODEL_META_PATH", "models/champion_meta.json")

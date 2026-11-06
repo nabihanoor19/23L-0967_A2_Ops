@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Result - VisionGuard{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Result</h1>
+  <div class="result">
+    <img src="data:image/jpeg;base64,{{ preview }}" alt="Preview of the uploaded image">
+    <div>
+      <span class="verdict {{ 'ai' if result.label == 'AI-generated' else 'real' }}">{{ result.label }}</span>
+      <p style="margin-bottom:0">Confidence: <strong>{{ "%.0f"|format(result.confidence * 100) }}%</strong></p>
+      <div class="bar"><span style="width: {{ result.confidence * 100 }}%"></span></div>
+      <table>
+        <tr><th>File</th><td>{{ filename }}</td></tr>
+        <tr><th>Size</th><td>{{ width }} x {{ height }} px, {{ "%.0f"|format(size_kb) }} KB</td></tr>
+        <tr><th>Raw AI score</th><td>{{ "%.3f"|format(result.p_ai) }} (verdict is AI if at least {{ "%.3f"|format(result.threshold) }})</td></tr>
+        <tr><th>Model</th><td>visionguard, version {{ result.model_version }}</td></tr>
+        <tr><th>Time</th><td>{{ "%.0f"|format(latency_ms) }} ms</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="caveat">
+    <strong>Please read:</strong> this is an estimate, not proof. VisionGuard is a student prototype that was right on roughly three out of four images in our own validation tests. The confidence is the model's own score and is not a guarantee. Do not use this verdict alone to accuse anyone or to decide what is true.
+  </div>
+  <p><a class="btn" href="{{ url_for('index') }}">Check another image</a></p>
+</div>
+{% endblock %}
