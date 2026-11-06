@@ -1,0 +1,8 @@
+run_name,changed_vs_base,epochs_run,best_epoch,best_val_loss,val_auc,val_accuracy,val_precision,val_recall,train_accuracy_at_best
+r6_three_blocks,unfrozen_blocks=3,8,3,0.4476,0.8871,0.7603,0.7447,0.8642,0.7885
+r7_image_160,img_size=160,8,3,0.467,0.8558,0.774,0.7727,0.8395,0.8267
+r3_lr_high,learning_rate=0.001,11,6,0.4735,0.8766,0.7945,0.8228,0.8025,0.8634
+r1_base,none (base),12,7,0.4955,0.8636,0.774,0.7791,0.8272,0.9427
+r4_no_augmentation,augmentation=False,7,2,0.5022,0.8262,0.7397,0.7654,0.7654,0.7709
+r2_lr_low,learning_rate=5e-05,16,11,0.5037,0.834,0.7397,0.7471,0.8025,0.8796
+r5_frozen_backbone,unfrozen_blocks=0,20,20,0.605,0.7224,0.6438,0.6526,0.7654,0.6931
