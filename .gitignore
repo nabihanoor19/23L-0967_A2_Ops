@@ -11,3 +11,5 @@ mlflow.db
 mlflow_tmp/
 test_files/
 visionguard.db
+models/
+reports/*smoke*.csv
