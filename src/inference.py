@@ -1,11 +1,11 @@
-import json
 import os
+
+os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")   # must be set before TensorFlow is imported
+
+import json
 from pathlib import Path
 
-import numpy as np
 import tensorflow as tf
-import os
-os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")   # oneDNN made single-image calls very slow here
 
 MODEL_PATH = os.environ.get("MODEL_PATH", "models/champion.keras")
 META_PATH = os.environ.get("MODEL_META_PATH", "models/champion_meta.json")
@@ -21,13 +21,12 @@ class Predictor:
             raise FileNotFoundError(f"Model file not found: {model_path}")
         self.model = tf.keras.models.load_model(model_path, compile=False)
         self.img_size = int(self.model.input_shape[1])
-        meta = json.load(open(meta_path)) if Path(meta_path).exists() else {}
+        meta = json.loads(Path(meta_path).read_text()) if Path(meta_path).exists() else {}
         self.threshold = float(os.environ.get("THRESHOLD") or meta.get("val_threshold", 0.5))
         self.model_version = str(meta.get("version", "unknown"))
-                # compiled forward pass: much faster than calling the model in eager mode
+        # compiled forward pass, plus one warm-up call so the first request is not slower
         self._forward = tf.function(lambda x: self.model(x, training=False),
                                     reduce_retracing=True)
-        # warm-up call, so the first real request is not slower than the others
         self._forward(tf.zeros((1, self.img_size, self.img_size, 3), dtype=tf.float32))
 
     def preprocess(self, image_bytes):

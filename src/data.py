@@ -1,5 +1,5 @@
-import tensorflow as tf
 import pandas as pd
+import tensorflow as tf
 
 IMG_SIZE = 224
 BATCH_SIZE = 32

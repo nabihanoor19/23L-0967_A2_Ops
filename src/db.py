@@ -1,8 +1,19 @@
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
-from sqlalchemy import (Column, DateTime, Float, Integer, MetaData, String, Table,
-                        create_engine, insert, select, text)
+from sqlalchemy import (
+    Column,
+    DateTime,
+    Float,
+    Integer,
+    MetaData,
+    String,
+    Table,
+    create_engine,
+    insert,
+    select,
+    text,
+)
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///visionguard.db")
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
@@ -29,7 +40,7 @@ def init_db():
 
 def save_prediction(**row):
     with engine.begin() as conn:
-        conn.execute(insert(predictions).values(created_at=datetime.now(timezone.utc), **row))
+        conn.execute(insert(predictions).values(created_at=datetime.now(UTC), **row))
 
 
 def recent_predictions(limit=100):

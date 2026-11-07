@@ -1,6 +1,13 @@
+import os
+
+os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")   # must be set before TensorFlow is imported
+
+from dotenv import load_dotenv
+
+load_dotenv()   # read .env first: src.db and src.inference read their settings when imported
+
 import base64
 import io
-import os
 import time
 
 from flask import Flask, jsonify, render_template, request
@@ -11,13 +18,8 @@ from werkzeug.utils import secure_filename
 from src import db
 from src.inference import InvalidImageError, load_model_once
 
-os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")   # oneDNN made single-image calls very slow here
-
-from dotenv import load_dotenv
-load_dotenv()          # reads .env (if present) into environment variables, before any setting is read
-
-MAX_UPLOAD_MB = float(os.environ.get("MAX_UPLOAD_MB", 8))
-MAX_PIXELS = int(os.environ.get("MAX_PIXELS", 30_000_000))
+MAX_UPLOAD_MB = float(os.environ.get("MAX_UPLOAD_MB", "8"))
+MAX_PIXELS = int(os.environ.get("MAX_PIXELS", "30000000"))
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "bmp"}
 ALLOWED_FORMATS = {"JPEG", "PNG", "WEBP", "BMP"}
 
@@ -96,7 +98,8 @@ def predict():
                        model_version=result["model_version"], latency_ms=latency_ms)
     return render_template("result.html", result=result, filename=safe_name, width=width,
                            height=height, size_kb=len(data) / 1024, preview=preview,
-                           latency_ms=latency_ms)
+                           latency_ms=latency_ms,
+                           borderline=abs(result["p_ai"] - result["threshold"]) < 0.10)
 
 
 @app.get("/history")
@@ -151,4 +154,4 @@ def handle_server_error(e):
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("HOST", "127.0.0.1"),
-            port=int(os.environ.get("PORT", 5000)), debug=False)
+            port=int(os.environ.get("PORT", "5000")), debug=False)
