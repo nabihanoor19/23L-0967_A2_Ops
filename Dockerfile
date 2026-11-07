@@ -10,7 +10,7 @@ WORKDIR /app
 
 # 1) Dependencies first: this layer is rebuilt only when requirements-docker.txt changes
 COPY requirements-docker.txt .
-RUN pip install -r requirements-docker.txt
+RUN pip install --no-cache-dir -r requirements-docker.txt
 
 # 2) Unprivileged user that owns the app folder
 RUN useradd --create-home --uid 10001 appuser && chown appuser:appuser /app
