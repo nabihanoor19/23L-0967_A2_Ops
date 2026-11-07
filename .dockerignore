@@ -1,0 +1,22 @@
+# secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# large or irrelevant to the web app
+venv/
+.git/
+.dvc/
+data/
+models/
+mlruns/
+tuner_runs/
+reports/
+test_files/
+scripts/
+.keras_home/
+.mplcache/
+__pycache__/
+*.pyc
+*.db
+*.keras
