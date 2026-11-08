@@ -14,7 +14,10 @@
         <tr><th>Size</th><td>{{ width }} x {{ height }} px, {{ "%.0f"|format(size_kb) }} KB</td></tr>
         <tr><th>Raw AI score</th><td>{{ "%.3f"|format(result.p_ai) }} (verdict is AI if at least {{ "%.3f"|format(result.threshold) }})</td></tr>
         <tr><th>Model</th><td>visionguard, version {{ result.model_version }}</td></tr>
-        <tr><th>Time</th><td>{{ "%.0f"|format(latency_ms) }} ms</td></tr>
+        {% if result.backend %}
+        <tr><th>Backend</th><td>{{ result.backend }}</td></tr>
+        {% endif %}
+        <tr><th>Time</th><td>{{ "%.0f"|format(latency_ms) }} ms{% if result.cloud_latency_ms %} (cloud model: {{ "%.0f"|format(result.cloud_latency_ms) }} ms){% endif %}</td></tr>
       </table>
     </div>
   </div>

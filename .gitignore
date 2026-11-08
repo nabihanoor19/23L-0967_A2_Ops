@@ -13,3 +13,4 @@ test_files/
 visionguard.db
 models/
 reports/*smoke*.csv
+chromedriver/

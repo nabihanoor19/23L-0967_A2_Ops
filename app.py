@@ -90,6 +90,10 @@ def predict():
     except InvalidImageError as e:
         raise UserError("This file cannot be read as an image",
                         "The model could not decode this file.", 422) from e
+    except ValueError as e:
+        raise UserError("Image rejected", str(e), 413) from e
+    except RuntimeError as e:
+        raise UserError("Prediction failed", str(e), 502) from e
     latency_ms = (time.perf_counter() - started) * 1000
 
     db.save_prediction(filename=safe_name, file_size_kb=len(data) / 1024,
@@ -110,10 +114,12 @@ def history():
 @app.get("/health")
 def health():
     database_ok = db.db_ok()
+    backend_type = "cloud_api" if predictor.__class__.__name__ == "CloudPredictor" else "local_model"
     body = {"status": "ok" if database_ok else "degraded",
             "model_loaded": True,
             "model_version": predictor.model_version,
             "threshold": round(predictor.threshold, 4),
+            "backend": backend_type,
             "database": "ok" if database_ok else "unreachable",
             "debug_mode": app.debug,
             "max_upload_mb": MAX_UPLOAD_MB}
