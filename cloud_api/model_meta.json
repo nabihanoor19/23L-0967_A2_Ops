@@ -1,0 +1,6 @@
+{
+  "version": "2",
+  "val_threshold": 0.4296,
+  "img_size": 224,
+  "source_run": "r6_three_blocks"
+}
